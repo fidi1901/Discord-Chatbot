@@ -1,6 +1,6 @@
 const { token } = require('./config.json');
 const { Client, GatewayIntentBits, ButtonBuilder, ActionRowBuilder, ButtonStyle, Events } = require('discord.js');
-
+const { TicTacToe } = require('./databaseObjects.js')
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 client.once('ready', () => {
@@ -109,12 +109,21 @@ client.on(Events.InteractionCreate, async interaction => {
   }
   tictactoe_state[row][col] = PLAYER;
   if (isGameOver()) {
+    let user = await TicTacToe.findOne({
+      where: {
+        user_id: interaction.user.id
+      }
+    });
+    if (!user) {
+      user = await TicTacToe.create({ user_id: interaction.user.id });
+    }
+    await user.increment('score')
+    await user.save();
     interaction.update({
-      content: "You won the game of tic-tac-toe!",
+      content: "You won the game of tic-tac-toe! You have now won " + (user.get('score') + 1) + " time(s).",
       components: makeGrid()
     })
     return;
-
   }
   if (isDraw()) {
     interaction.update({
