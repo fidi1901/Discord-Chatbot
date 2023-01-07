@@ -1,2 +1,2 @@
 # Discord-Chatbot
-Chatbot made for doing tasks on Discord.
+A discord bot using NodeJS
