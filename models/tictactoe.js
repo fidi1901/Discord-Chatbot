@@ -4,10 +4,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       primaryKey: true,
     },
-    score: {
+    winRecord: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
       allowNull: false,
+    },
+    lossRecord: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+    },
+    drawRecord: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+
     }
   })
 }

@@ -117,17 +117,27 @@ client.on(Events.InteractionCreate, async interaction => {
     if (!user) {
       user = await TicTacToe.create({ user_id: interaction.user.id });
     }
-    await user.increment('score')
+    await user.increment('winRecord')
     await user.save();
     interaction.update({
-      content: "You won the game of tic-tac-toe! You have now won " + (user.get('score') + 1) + " time(s).",
+      content: "You won the game of tic-tac-toe! Your record is now  " + (user.get('winRecord') + 1) + "-" + (user.get('drawRecord')) + "-" + (user.get('lossRecord')),
       components: makeGrid()
     })
     return;
   }
   if (isDraw()) {
+    let user = await TicTacToe.findOne({
+      where: {
+        user_id: interaction.user.id
+      }
+    });
+    if (!user) {
+      user = await TicTacToe.create({ user_id: interaction.user.id });
+    }
+    await user.increment('drawRecord')
+    await user.save();
     interaction.update({
-      content: "The game resulted in a draw!",
+      content: "The game resulted in a draw! Your record is now " + (user.get('winRecord')) + " - " + (user.get('drawRecord') + 1) + " -" + (user.get('lossRecord')),
       components: makeGrid()
     })
     return;
@@ -146,16 +156,36 @@ client.on(Events.InteractionCreate, async interaction => {
 
   tictactoe_state[botRow][botCol] = BOT;
   if (isGameOver()) {
+    let user = await TicTacToe.findOne({
+      where: {
+        user_id: interaction.user.id
+      }
+    });
+    if (!user) {
+      user = await TicTacToe.create({ user_id: interaction.user.id });
+    }
+    await user.increment('lossRecord')
+    await user.save();
     interaction.update({
-      content: "You lost the game of tic-tac-toe!",
+      content: "You lost the game of tic-tac-toe! Your record is now " + (user.get('winRecord')) + " - " + (user.get('drawRecord')) + " -" + (user.get('lossRecord') + 1),
       components: makeGrid()
     })
     return;
 
   }
   if (isDraw()) {
+    let user = await TicTacToe.findOne({
+      where: {
+        user_id: interaction.user.id
+      }
+    });
+    if (!user) {
+      user = await TicTacToe.create({ user_id: interaction.user.id });
+    }
+    await user.increment('drawRecord')
+    await user.save();
     interaction.update({
-      content: "The game resulted in a draw!",
+      content: "The game resulted in a draw! Your record is now " + (user.get('winRecord')) + " - " + (user.get('drawRecord') + 1) + " -" + (user.get('lossRecord')),
       components: makeGrid()
     })
     return;
