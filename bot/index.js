@@ -1,4 +1,4 @@
-const { token } = require('./config.json');
+const { token } = require('../config.json');
 const { Client, GatewayIntentBits, ButtonBuilder, ActionRowBuilder, ButtonStyle, Events } = require('discord.js');
 const { TicTacToe } = require('./databaseObjects.js')
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
@@ -9,8 +9,8 @@ client.once('ready', () => {
 
 client.on('messageCreate', (message) => {
   if (message.author.id === client.user.id) return;
-  if (message.content === "Who's winning the world cup?") {
-    message.reply("Brazil");
+  if (message.content === "Who's the GOAT of football?") {
+    message.reply("Messi of course");
   }
 })
 
@@ -120,7 +120,7 @@ client.on(Events.InteractionCreate, async interaction => {
     await user.increment('winRecord')
     await user.save();
     interaction.update({
-      content: "You won the game of tic-tac-toe! Your record is now  " + (user.get('winRecord') + 1) + "-" + (user.get('drawRecord')) + "-" + (user.get('lossRecord')),
+      content: "You won the game of tic-tac-toe! Your record is now  " + (user.get('winRecord') + 1) + " - " + (user.get('drawRecord')) + " - " + (user.get('lossRecord')),
       components: makeGrid()
     })
     return;
@@ -137,7 +137,7 @@ client.on(Events.InteractionCreate, async interaction => {
     await user.increment('drawRecord')
     await user.save();
     interaction.update({
-      content: "The game resulted in a draw! Your record is now " + (user.get('winRecord')) + " - " + (user.get('drawRecord') + 1) + " -" + (user.get('lossRecord')),
+      content: "The game resulted in a draw! Your record is now " + (user.get('winRecord')) + " - " + (user.get('drawRecord') + 1) + " - " + (user.get('lossRecord')),
       components: makeGrid()
     })
     return;
@@ -167,7 +167,7 @@ client.on(Events.InteractionCreate, async interaction => {
     await user.increment('lossRecord')
     await user.save();
     interaction.update({
-      content: "You lost the game of tic-tac-toe! Your record is now " + (user.get('winRecord')) + " - " + (user.get('drawRecord')) + " -" + (user.get('lossRecord') + 1),
+      content: "You lost the game of tic-tac-toe! Your record is now " + (user.get('winRecord')) + " - " + (user.get('drawRecord')) + " - " + (user.get('lossRecord') + 1),
       components: makeGrid()
     })
     return;
