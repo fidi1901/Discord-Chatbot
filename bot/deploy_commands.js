@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10')
-const { clientId, guildId, token } = require('./config.json');
+const { clientId, guildIds, token } = require('../config.json');
 
 
 const commands = [
@@ -11,6 +11,8 @@ const commands = [
 
 const rest = new REST({ version: '10' }).setToken(token)
 
-rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands.map(command => command.toJSON()) })
-  .then(() => console.log('Successfully registered application commands.'))
-  .catch(console.error);
+for (i = 0; i < guildIds.length; i++) {
+  rest.put(Routes.applicationGuildCommands(clientId, guildIds[i]), { body: commands.map(command => command.toJSON()) })
+    .then(() => console.log('Successfully registered application commands.'))
+    .catch(console.error);
+}
