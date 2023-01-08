@@ -1,2 +1,2 @@
 # Discord-Chatbot
-A discord bot using NodeJS and React.
+A discord bot using Express NodeJS and React.
